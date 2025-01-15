@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="600" height="500" viewBox="0 0 600 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <!-- Background Elements -->
+    <circle cx="300" cy="250" r="200" fill="#F3F4F6" opacity="0.5"/>
+    <circle cx="300" cy="250" r="150" fill="#EEF2FF" opacity="0.7"/>
+    
+    <!-- Stars -->
+    <path d="M150 100L157 107L164 100L157 93L150 100Z" fill="#6366F1"/>
+    <path d="M450 350L457 357L464 350L457 343L450 350Z" fill="#6366F1"/>
+    <path d="M400 150L407 157L414 150L407 143L400 150Z" fill="#EC4899"/>
+    
+    <!-- Book -->
+    <rect x="200" y="200" width="200" height="250" rx="10" fill="#6366F1"/>
+    <rect x="210" y="210" width="180" height="230" rx="5" fill="white"/>
+    
+    <!-- Children Reading -->
+    <circle cx="280" cy="280" r="30" fill="#EC4899"/> <!-- Child 1 head -->
+    <rect x="265" y="310" width="30" height="40" rx="5" fill="#EC4899"/> <!-- Child 1 body -->
+    
+    <circle cx="320" cy="280" r="30" fill="#6366F1"/> <!-- Child 2 head -->
+    <rect x="305" y="310" width="30" height="40" rx="5" fill="#6366F1"/> <!-- Child 2 body -->
+    
+    <!-- Magical Elements -->
+    <path d="M180 150C180 150 200 130 220 150C240 170 260 150 260 150" stroke="#EC4899" stroke-width="3"/>
+    <path d="M340 400C340 400 360 380 380 400C400 420 420 400 420 400" stroke="#6366F1" stroke-width="3"/>
+    
+    <!-- Hearts -->
+    <path d="M500 200C500 200 520 180 540 200C560 220 540 240 500 200Z" fill="#EC4899"/>
+    <path d="M100 300C100 300 120 280 140 300C160 320 140 340 100 300Z" fill="#EC4899"/>
+</svg>
