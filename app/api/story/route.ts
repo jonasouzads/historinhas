@@ -101,8 +101,18 @@ export async function POST(request: Request) {
         content
       }
     });
-  } catch (error) {
+  } catch (error: any) {
     console.error('Erro ao gerar história:', error);
+    
+    // Se for um erro da OpenAI, retornar a mensagem específica
+    if (error?.response?.data?.error?.message) {
+      return NextResponse.json(
+        { error: error.response.data.error.message },
+        { status: 500 }
+      );
+    }
+    
+    // Erro genérico
     return NextResponse.json(
       { error: 'Não foi possível gerar a história. Por favor, tente novamente.' },
       { status: 500 }

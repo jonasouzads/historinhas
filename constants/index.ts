@@ -19,7 +19,7 @@ export const ROUTES = {
 } as const;
 
 export const API_CONFIG = {
-  OPENAI_MODEL: 'gpt-3.5-turbo',
+  OPENAI_MODEL: 'gpt-4o-mini',
   MAX_TOKENS: 1000,
   TEMPERATURE: 0.7,
 } as const;
