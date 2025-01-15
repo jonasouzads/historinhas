@@ -21,12 +21,12 @@ export async function generateStoryWithAI(params: StoryParams) {
       body: JSON.stringify(params),
     });
 
+    const data = await response.json();
+    
     if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.error || 'Erro ao gerar história');
+      throw new Error(data.error || 'Erro ao gerar história');
     }
 
-    const data = await response.json();
     return data.story;
   } catch (error) {
     console.error('Erro ao gerar história:', error);
