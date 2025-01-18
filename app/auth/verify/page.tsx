@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import { Decorations } from '@/components/Decorations';
+import { AuthError } from '@supabase/supabase-js';
 
 export default function VerifyPage() {
   const router = useRouter();
@@ -17,7 +18,6 @@ export default function VerifyPage() {
     const verifyToken = async () => {
       const token = searchParams.get('token');
       const type = searchParams.get('type');
-      const redirectTo = searchParams.get('redirect_to');
 
       if (!token) {
         setError('Token de verificação não encontrado');
@@ -45,9 +45,10 @@ export default function VerifyPage() {
         } else {
           throw new Error('Tipo de verificação inválido');
         }
-      } catch (err: any) {
+      } catch (err) {
         console.error('Erro na verificação:', err);
-        setError(err.message || 'Erro ao verificar o token');
+        const errorMessage = err instanceof AuthError ? err.message : 'Erro ao verificar o token';
+        setError(errorMessage);
         setVerifying(false);
       }
     };
