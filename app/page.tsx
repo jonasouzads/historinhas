@@ -417,7 +417,6 @@ export default function HomePage() {
                   "Histórias compartilháveis",
                   "Suporte prioritário",
                   "Temas premium",
-                  "Backup na nuvem"
                 ],
                 color: "secondary",
                 popular: true
