@@ -8,6 +8,11 @@ export async function middleware(request: NextRequest) {
   const res = NextResponse.next();
   const supabase = createMiddlewareClient<Database>({ req: request, res });
 
+  // Se for uma rota de verificação, permite passar
+  if (request.nextUrl.pathname.startsWith('/auth/verify')) {
+    return res;
+  }
+
   try {
     const {
       data: { session },

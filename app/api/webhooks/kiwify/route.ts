@@ -8,28 +8,49 @@ const WEBHOOK_SECRET = process.env.KIWIFY_WEBHOOK_SECRET || '';
 const IS_DEVELOPMENT = process.env.NODE_ENV === 'development';
 
 interface KiwifyWebhookData {
-  webhook_event_type: string;
-  order_id: string;
-  subscription_id: string;
-  Customer: {
-    email: string;
-    full_name: string;
-    mobile: string;
-  };
-  Product: {
-    product_name: string;
-  };
-  Subscription: {
-    start_date: string;
-    next_payment: string;
-  };
-  order_status: string;
-  approved_date: string;
-  payment_method: string;
-  installments: number;
-  Commissions: {
-    currency: string;
-    charge_amount: number;
+  url: string;
+  signature: string;
+  order: {
+    webhook_event_type: string;
+    order_id: string;
+    subscription_id: string;
+    order_status: string;
+    approved_date: string | null;
+    payment_method: string;
+    installments?: number;
+    Customer: {
+      email: string;
+      full_name: string;
+      mobile: string;
+    };
+    Product: {
+      product_id: string;
+      product_name: string;
+    };
+    Subscription?: {
+      start_date: string;
+      next_payment: string;
+      status: string;
+      plan: {
+        id: string;
+        name: string;
+        frequency: string;
+        qty_charges: number;
+      };
+    };
+    Commissions: {
+      currency: string;
+      charge_amount: number;
+      kiwify_fee: number;
+      my_commission: number;
+      commissioned_stores: Array<{
+        id: string;
+        type: string;
+        value: string;
+        email: string;
+        custom_name: string;
+      }>;
+    };
   };
 }
 
@@ -46,7 +67,7 @@ type WebhookEventType =
   | 'subscription_renewed';
 
 // Função para validar a assinatura do webhook
-function validateWebhookSignature(payload: KiwifyWebhookData, signature: string): boolean {
+function validateWebhookSignature(payload: KiwifyWebhookData['order'], signature: string): boolean {
   const calculatedSignature = crypto
     .createHmac('sha1', WEBHOOK_SECRET)
     .update(JSON.stringify(payload))
@@ -77,13 +98,9 @@ export async function POST(request: Request) {
     const rawBody = await request.text();
     const payload: KiwifyWebhookData = JSON.parse(rawBody);
 
-    // Obter a assinatura do webhook da query string
-    const url = new URL(request.url);
-    const signature = url.searchParams.get('signature');
-    
     // Em desenvolvimento, podemos pular a validação da assinatura
     if (!IS_DEVELOPMENT) {
-      if (!signature) {
+      if (!payload.signature) {
         return new NextResponse(
           JSON.stringify({ error: 'Assinatura não fornecida' }), 
           { status: 400, headers: { 'Content-Type': 'application/json' } }
@@ -91,7 +108,7 @@ export async function POST(request: Request) {
       }
 
       // Validar a assinatura usando o corpo raw conforme documentação
-      if (!validateWebhookSignature(payload, signature)) {
+      if (!validateWebhookSignature(payload.order, payload.signature)) {
         return new NextResponse(
           JSON.stringify({ error: 'Assinatura inválida' }), 
           { status: 400, headers: { 'Content-Type': 'application/json' } }
@@ -103,19 +120,19 @@ export async function POST(request: Request) {
     const supabase = createRouteHandlerClient({ cookies });
 
     // Processar diferentes eventos do webhook
-    const eventType = payload.webhook_event_type as WebhookEventType;
+    const eventType = payload.order.webhook_event_type as WebhookEventType;
 
     console.log('Processando evento:', eventType, {
-      order_id: payload.order_id,
-      subscription_id: payload.subscription_id,
-      status: payload.order_status
+      order_id: payload.order.order_id,
+      subscription_id: payload.order.subscription_id,
+      status: payload.order.order_status
     });
 
     switch (eventType) {
       case 'order_approved': {
         // Verificar se o status do pedido é paid
-        if (payload.order_status !== 'paid') {
-          console.log('Pedido não está pago:', payload.order_status);
+        if (payload.order.order_status !== 'paid') {
+          console.log('Pedido não está pago:', payload.order.order_status);
           break;
         }
 
@@ -125,12 +142,14 @@ export async function POST(request: Request) {
           Customer: { email, full_name, mobile },
           Product: { product_name },
           Subscription,
-        } = payload;
+        } = payload.order;
 
-        // Usar a data de início da assinatura se disponível, senão usar approved_date
+        // Usar a data de início da assinatura se disponível, senão usar approved_date ou data atual
         const startDate = Subscription?.start_date 
           ? new Date(Subscription.start_date)
-          : new Date(payload.approved_date);
+          : payload.order.approved_date 
+            ? new Date(payload.order.approved_date)
+            : new Date();
 
         // Usar a próxima data de pagamento como data final se disponível
         const endDate = Subscription?.next_payment
@@ -191,10 +210,10 @@ export async function POST(request: Request) {
             end_date: endDate.toISOString(),
           },
           payment: {
-            method: payload.payment_method,
-            installments: payload.installments,
-            currency: payload.Commissions?.currency,
-            amount: payload.Commissions?.charge_amount,
+            method: payload.order.payment_method,
+            installments: payload.order.installments,
+            currency: payload.order.Commissions.currency,
+            amount: payload.order.Commissions.charge_amount,
           }
         });
 
@@ -205,7 +224,7 @@ export async function POST(request: Request) {
       case 'chargeback':
       case 'subscription_canceled': {
         // Todos esses eventos cancelam a assinatura
-        const { order_id, subscription_id, Customer: { email, full_name, mobile } } = payload;
+        const { order_id, subscription_id, Customer: { email, full_name, mobile } } = payload.order;
 
         await supabase
           .from('subscriptions')
@@ -229,7 +248,7 @@ export async function POST(request: Request) {
       }
 
       case 'subscription_renewed': {
-        const { subscription_id, approved_date } = payload;
+        const { subscription_id, approved_date } = payload.order;
 
         if (subscription_id && approved_date) {
           const startDate = new Date(approved_date);
@@ -249,7 +268,7 @@ export async function POST(request: Request) {
       }
 
       case 'subscription_late': {
-        const { subscription_id } = payload;
+        const { subscription_id } = payload.order;
 
         if (subscription_id) {
           await supabase
