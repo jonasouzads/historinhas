@@ -1,10 +1,11 @@
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import type { Database } from '@/lib/supabase';
 
-const supabase = createClientComponentClient<Database>();
+export type Child = Database['public']['Tables']['children']['Row'];
+export type Story = Database['public']['Tables']['stories']['Row'];
+export type Profile = Database['public']['Tables']['profiles']['Row'];
 
-type Child = Database['public']['Tables']['children']['Row'];
-type Story = Database['public']['Tables']['stories']['Row'];
+const supabase = createClientComponentClient<Database>();
 
 // Funções para gerenciar crianças
 export async function getChildren(userId: string): Promise<Child[]> {
@@ -41,6 +42,26 @@ export async function deleteChild(childId: string): Promise<void> {
     .eq('id', childId);
 
   if (error) throw error;
+}
+
+// Função para verificar assinatura ativa
+export async function hasActiveSubscription(userId: string): Promise<boolean> {
+  const { data: subscriptions, error } = await supabase
+    .from('subscriptions')
+    .select('*')
+    .eq('user_id', userId)
+    .eq('status', 'active')
+    .lte('start_date', new Date().toISOString())
+    .gte('end_date', new Date().toISOString())
+    .order('created_at', { ascending: false })
+    .limit(1);
+
+  if (error) {
+    console.error('Erro ao verificar assinatura:', error);
+    return false;
+  }
+
+  return subscriptions && subscriptions.length > 0;
 }
 
 // Funções para gerenciar histórias

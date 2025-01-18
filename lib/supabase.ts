@@ -13,16 +13,88 @@ export type Json =
   | { [key: string]: Json | undefined }
   | Json[];
 
+export type SubscriptionStatus = 'active' | 'canceled' | 'expired';
+export type SubscriptionPlan = 'magic' | 'family';
+export type Gender = 'menino' | 'menina';
+export type UserRole = 'user' | 'admin';
+
 export interface Database {
   public: {
     Tables: {
+      profiles: {
+        Row: {
+          id: string;
+          user_id: string | null;
+          full_name: string | null;
+          email: string;
+          role: UserRole;
+          created_at: string;
+          phone: string | null;
+        };
+        Insert: {
+          id?: string;
+          user_id?: string | null;
+          full_name?: string | null;
+          email: string;
+          role?: UserRole;
+          created_at?: string;
+          phone?: string | null;
+        };
+        Update: {
+          id?: string;
+          user_id?: string | null;
+          full_name?: string | null;
+          email?: string;
+          role?: UserRole;
+          created_at?: string;
+          phone?: string | null;
+        };
+      };
+      subscriptions: {
+        Row: {
+          id: string;
+          user_id: string;
+          kiwify_order_id: string | null;
+          kiwify_subscription_id: string | null;
+          plan_type: SubscriptionPlan;
+          status: SubscriptionStatus;
+          start_date: string;
+          end_date: string;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          user_id: string;
+          kiwify_order_id?: string | null;
+          kiwify_subscription_id?: string | null;
+          plan_type: SubscriptionPlan;
+          status?: SubscriptionStatus;
+          start_date: string;
+          end_date: string;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          user_id?: string;
+          kiwify_order_id?: string | null;
+          kiwify_subscription_id?: string | null;
+          plan_type?: SubscriptionPlan;
+          status?: SubscriptionStatus;
+          start_date?: string;
+          end_date?: string;
+          created_at?: string;
+          updated_at?: string;
+        };
+      };
       children: {
         Row: {
           id: string;
           user_id: string;
           name: string;
           age: number;
-          gender: 'menino' | 'menina';
+          gender: Gender;
           created_at: string;
         };
         Insert: {
@@ -30,7 +102,7 @@ export interface Database {
           user_id: string;
           name: string;
           age: number;
-          gender: 'menino' | 'menina';
+          gender: Gender;
           created_at?: string;
         };
         Update: {
@@ -38,7 +110,7 @@ export interface Database {
           user_id?: string;
           name?: string;
           age?: number;
-          gender?: 'menino' | 'menina';
+          gender?: Gender;
           created_at?: string;
         };
       };
@@ -80,90 +152,24 @@ export interface Database {
           created_at?: string;
         };
       };
-      profiles: {
-        Row: {
-          id: string;
-          username: string | null;
-          full_name: string | null;
-          avatar_url: string | null;
-          created_at: string;
-          updated_at: string | null;
-        };
-        Insert: {
-          id: string;
-          username?: string | null;
-          full_name?: string | null;
-          avatar_url?: string | null;
-          created_at?: string;
-          updated_at?: string | null;
-        };
-        Update: {
-          id?: string;
-          username?: string | null;
-          full_name?: string | null;
-          avatar_url?: string | null;
-          created_at?: string;
-          updated_at?: string | null;
-        };
-      };
-      subscriptions: {
-        Row: {
-          id: string;
-          user_id: string;
-          plan_type: 'free' | 'basic' | 'premium';
-          status: 'active' | 'inactive' | 'cancelled';
-          created_at: string;
-          updated_at: string | null;
-        };
-        Insert: {
-          id?: string;
-          user_id: string;
-          plan_type: 'free' | 'basic' | 'premium';
-          status: 'active' | 'inactive' | 'cancelled';
-          created_at?: string;
-          updated_at?: string | null;
-        };
-        Update: {
-          id?: string;
-          user_id?: string;
-          plan_type?: 'free' | 'basic' | 'premium';
-          status?: 'active' | 'inactive' | 'cancelled';
-          created_at?: string;
-          updated_at?: string | null;
-        };
-      };
-      subscription_features: {
-        Row: {
-          id: string;
-          plan_type: 'free' | 'basic' | 'premium';
-          feature_name: string;
-          feature_value: string;
-          created_at: string;
-        };
-        Insert: {
-          id?: string;
-          plan_type: 'free' | 'basic' | 'premium';
-          feature_name: string;
-          feature_value: string;
-          created_at?: string;
-        };
-        Update: {
-          id?: string;
-          plan_type?: 'free' | 'basic' | 'premium';
-          feature_name?: string;
-          feature_value?: string;
-          created_at?: string;
-        };
-      };
     };
     Views: {
       [_ in never]: never;
     };
     Functions: {
-      [_ in never]: never;
+      create_user_profile: {
+        Args: {
+          p_user_id: string;
+          p_full_name: string;
+          p_email: string;
+          p_role: UserRole;
+        };
+        Returns: void;
+      };
     };
     Enums: {
-      [_ in never]: never;
+      subscription_status: SubscriptionStatus;
+      subscription_plan: SubscriptionPlan;
     };
   };
 }

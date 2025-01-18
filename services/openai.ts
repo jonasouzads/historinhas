@@ -1,13 +1,12 @@
-import OpenAI from 'openai';
+import { Gender } from '@/lib/supabase';
 
-export interface StoryParams {
-  childId: string;
+interface StoryParams {
   childName: string;
   childAge: number;
-  childGender: 'menino' | 'menina';
-  storyTheme: string;
-  storyMood?: string;
-  storyValues?: string[];
+  childGender: Gender;
+  theme: string;
+  mood?: string;
+  values?: string[];
   additionalDetails?: string;
 }
 

@@ -1,13 +1,28 @@
 import { NextResponse } from 'next/server';
-import OpenAI from 'openai';
 import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
 import { cookies } from 'next/headers';
+import { OpenAI } from 'openai';
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+interface StoryRequest {
+  childName: string;
+  childAge: number;
+  childGender: string;
+  storyTheme: string;
+  storyMood: string;
+  storyValues: string[];
+  additionalDetails: string;
+}
 
-export async function POST(request: Request) {
+interface StoryResponse {
+  success: boolean;
+  story?: {
+    title: string;
+    content: string;
+  };
+  error?: string;
+}
+
+export async function POST(request: Request): Promise<NextResponse<StoryResponse>> {
   try {
     // Criar cliente Supabase com contexto do servidor
     const supabase = createServerComponentClient({ cookies });
@@ -16,8 +31,16 @@ export async function POST(request: Request) {
     const { data: { user }, error: userError } = await supabase.auth.getUser();
     if (userError || !user) {
       return NextResponse.json(
-        { error: 'Não autorizado' },
+        { success: false, error: 'Não autorizado' },
         { status: 401 }
+      );
+    }
+
+    // Se não houver uma chave API configurada
+    if (!process.env.OPENAI_API_KEY) {
+      return NextResponse.json(
+        { success: false, error: 'API key não configurada' },
+        { status: 500 }
       );
     }
 
@@ -29,7 +52,7 @@ export async function POST(request: Request) {
       storyMood = 'feliz',
       storyValues = [],
       additionalDetails,
-    } = await request.json();
+    }: StoryRequest = await request.json();
 
     const prompt = `Crie uma história infantil mágica em português para ${childName}, 
     ${childGender === 'menino' ? 'um menino' : 'uma menina'} de ${childAge} anos.
@@ -57,6 +80,10 @@ export async function POST(request: Request) {
     HISTÓRIA: [Conteúdo da história em parágrafos]`;
 
     console.log('Enviando prompt para OpenAI:', prompt);
+
+    const openai = new OpenAI({
+      apiKey: process.env.OPENAI_API_KEY,
+    });
 
     const completion = await openai.chat.completions.create({
       messages: [
@@ -96,25 +123,40 @@ export async function POST(request: Request) {
 
     // Retornar apenas o título e conteúdo gerados
     return NextResponse.json({
+      success: true,
       story: {
         title,
         content
       }
     });
-  } catch (error: any) {
+  } catch (error) {
     console.error('Erro ao gerar história:', error);
-    
+
     // Se for um erro da OpenAI, retornar a mensagem específica
-    if (error?.response?.data?.error?.message) {
+    if (
+      error &&
+      typeof error === 'object' &&
+      'response' in error &&
+      error.response &&
+      typeof error.response === 'object' &&
+      'data' in error.response &&
+      error.response.data &&
+      typeof error.response.data === 'object' &&
+      'error' in error.response.data &&
+      error.response.data.error &&
+      typeof error.response.data.error === 'object' &&
+      'message' in error.response.data.error
+    ) {
+      const openAIError = error.response.data.error as { message: string };
       return NextResponse.json(
-        { error: error.response.data.error.message },
+        { success: false, error: openAIError.message },
         { status: 500 }
       );
     }
-    
+
     // Erro genérico
     return NextResponse.json(
-      { error: 'Não foi possível gerar a história. Por favor, tente novamente.' },
+      { success: false, error: 'Não foi possível gerar a história. Por favor, tente novamente.' },
       { status: 500 }
     );
   }

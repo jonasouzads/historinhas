@@ -5,6 +5,13 @@ import { useState, useEffect } from 'react';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import type { User } from '@supabase/auth-helpers-nextjs';
 
+interface SignUpOptions {
+  data?: {
+    full_name?: string;
+    phone?: string;
+  };
+}
+
 export function useAuth() {
   const router = useRouter();
   const [user, setUser] = useState<User | null>(null);
@@ -47,13 +54,14 @@ export function useAuth() {
     }
   };
 
-  const signUp = async (email: string, password: string) => {
+  const signUp = async (email: string, password: string, options?: SignUpOptions) => {
     try {
       const { error } = await supabase.auth.signUp({
         email,
         password,
         options: {
           emailRedirectTo: `${window.location.origin}/auth/callback`,
+          data: options?.data
         },
       });
       if (error) throw error;
@@ -73,11 +81,23 @@ export function useAuth() {
     }
   };
 
+  const resetPassword = async (email: string) => {
+    try {
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${window.location.origin}/auth/reset`,
+      });
+      if (error) throw error;
+    } catch (error) {
+      throw error;
+    }
+  };
+
   return {
     user,
     loading,
     signIn,
     signUp,
     signOut,
+    resetPassword,
   };
 }

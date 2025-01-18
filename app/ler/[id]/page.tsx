@@ -149,173 +149,179 @@ ${story.mood ? `Humor: ${story.mood}` : ''}
   };
 
   return (
-    <div className={`min-h-screen bg-gradient-soft from-primary-50 via-white to-secondary-50 ${
-      isFocusMode ? 'h-screen overflow-hidden bg-white' : ''
+    <div className={`min-h-screen w-full transition-colors duration-500 ${
+      isFocusMode ? 'fixed inset-0 bg-[#FFFAF5] overflow-y-auto' : 'bg-gradient-to-br from-primary-50 via-white to-secondary-50'
     }`}>
-      <div className={`max-w-4xl mx-auto px-4 ${
-        isFocusMode ? 'h-full py-4 flex flex-col' : 'py-8'
+      <div className={`w-full mx-auto px-4 sm:px-6 ${
+        isFocusMode ? 'h-full py-4 flex flex-col max-w-3xl' : 'py-8 max-w-5xl'
       }`}>
-        {/* Navegação Superior */}
-        <div className={`flex justify-between items-center mb-6 transition-opacity duration-300 ${
+        {/* Barra de Navegação Superior */}
+        <div className={`flex flex-wrap justify-between items-center gap-4 mb-8 transition-all duration-300 ${
           isFocusMode ? 'opacity-0 pointer-events-none' : 'opacity-100'
         }`}>
           <button
             onClick={() => router.push('/dashboard')}
-            className="px-4 py-2 border border-gray-200 rounded-full text-gray-700 hover:bg-gray-50 flex items-center gap-2"
+            className="group px-4 py-2 bg-white border border-gray-200 rounded-full text-gray-700 hover:bg-gray-50 hover:border-gray-300 flex items-center gap-2 transition-all shadow-sm hover:shadow text-sm sm:text-base"
           >
-            <span>←</span>
+            <span className="transform group-hover:-translate-x-0.5 transition-transform">←</span>
             <span>Voltar ao Dashboard</span>
           </button>
-          <button
-            onClick={handleDownload}
-            className="px-4 py-2 border border-gray-200 rounded-full text-gray-700 hover:bg-gray-50 flex items-center gap-2"
-          >
-            <span>Baixar História</span>
-            <span>📥</span>
-          </button>
+          <div className="flex gap-2 sm:gap-3">
+            <button
+              onClick={() => setIsFocusMode(!isFocusMode)}
+              className="px-4 py-2 bg-white border border-gray-200 rounded-full text-gray-700 hover:bg-gray-50 hover:border-gray-300 flex items-center gap-2 transition-all shadow-sm hover:shadow text-sm sm:text-base"
+            >
+              <span>{isFocusMode ? '👁️' : '📖'}</span>
+              <span className="hidden sm:inline">{isFocusMode ? 'Modo Normal' : 'Modo Leitura'}</span>
+            </button>
+            <button
+              onClick={handleDownload}
+              className="px-4 py-2 bg-white border border-gray-200 rounded-full text-gray-700 hover:bg-gray-50 hover:border-gray-300 flex items-center gap-2 transition-all shadow-sm hover:shadow text-sm sm:text-base"
+            >
+              <span>📥</span>
+              <span className="hidden sm:inline">Baixar História</span>
+            </button>
+          </div>
         </div>
 
-        {/* Cabeçalho */}
-        <div className={`bg-white rounded-2xl p-6 md:p-8 shadow-sm mb-6 transition-opacity duration-300 ${
+        {/* Cabeçalho da História */}
+        <div className={`bg-white rounded-3xl p-6 sm:p-8 shadow-sm mb-8 transition-all duration-300 ${
           isFocusMode ? 'opacity-0 pointer-events-none absolute' : 'opacity-100 relative'
         }`}>
-          <div className="flex flex-col md:flex-row items-start md:items-center gap-4 mb-4">
-            <div className="text-4xl">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6 mb-6">
+            <div className="text-4xl sm:text-5xl transform hover:scale-110 transition-transform cursor-default">
               {child.gender === 'menino' ? '👦' : '👧'}
             </div>
             <div>
-              <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-1">{story.title}</h1>
-              <p className="text-gray-600">
+              <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-2">{story.title}</h1>
+              <p className="text-base sm:text-lg text-gray-600">
                 Uma história especial para {child.name} • {child.age} anos
               </p>
             </div>
           </div>
-          <div className="flex flex-wrap items-center gap-3 text-sm text-gray-500">
-            <span className="inline-flex items-center gap-1">
+          <div className="flex flex-wrap items-center gap-3">
+            <span className="inline-flex items-center gap-2 px-3 py-1.5 bg-primary-50 rounded-full text-sm">
               <span>📚</span>
               <span>{story.theme}</span>
             </span>
             {story.mood && (
-              <span className="inline-flex items-center gap-1">
-                <span>•</span>
-                <span>
-                  {story.mood === 'feliz' && '😊'}
-                  {story.mood === 'aventureiro' && '🌟'}
-                  {story.mood === 'calmo' && '😌'}
-                  {story.mood === 'divertido' && '😄'}
-                  {story.mood}
-                </span>
+              <span className="inline-flex items-center gap-2 px-3 py-1.5 bg-secondary-50 rounded-full text-sm">
+                <span>😊</span>
+                <span>{story.mood}</span>
               </span>
             )}
           </div>
         </div>
 
         {/* Conteúdo da História */}
-        <div className={`relative bg-white rounded-2xl shadow-sm mb-6 transition-all duration-300 ${
-          isFocusMode ? 'flex-1 min-h-0 flex flex-col' : ''
+        <div className={`bg-white rounded-3xl shadow-sm transition-all duration-500 relative ${
+          isFocusMode ? 'flex-grow flex flex-col mt-8' : ''
         }`}>
-          {/* Botão de Modo Foco */}
-          <button
-            onClick={() => setIsFocusMode(!isFocusMode)}
-            className="absolute top-4 right-4 p-2 text-gray-500 hover:text-gray-700 transition-colors"
-            title={isFocusMode ? "Sair do modo foco" : "Entrar no modo foco"}
-          >
-            {isFocusMode ? (
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
-              </svg>
-            ) : (
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
-              </svg>
-            )}
-          </button>
-
-          <div className={`prose prose-lg max-w-none ${
-            isFocusMode ? 'flex-1 min-h-0 overflow-y-auto px-8 py-12' : 'p-6 md:p-8'
-          }`}>
-            <p className={`text-lg md:text-xl leading-relaxed ${isFocusMode ? 'text-2xl md:text-3xl' : ''}`}>
-              {pages[currentPage]}
-            </p>
+          {isFocusMode && (
+            <button
+              onClick={() => setIsFocusMode(false)}
+              className="absolute -top-12 right-0 p-2.5 bg-white rounded-full shadow-sm hover:shadow-md transition-all z-10 hover:bg-gray-50"
+              title="Sair do modo leitura"
+            >
+              <span className="text-lg text-gray-600">✕</span>
+            </button>
+          )}
+          
+          <div className={`w-full mx-auto ${isFocusMode ? 'p-4 sm:p-8 flex-grow overflow-y-auto' : 'p-6 sm:p-8'}`}>
+            <div className="prose prose-lg max-w-none">
+              {pages[currentPage].split('\n').map((paragraph, index) => (
+                <p key={index} className="mb-6 leading-relaxed text-gray-800">
+                  {paragraph}
+                </p>
+              ))}
+            </div>
           </div>
 
-          {/* Navegação */}
-          <div className={`flex items-center justify-center gap-4 ${
-            isFocusMode ? 'p-4 bg-white bg-opacity-90' : ''
-          } transition-opacity duration-300 ${
-            isFocusMode ? 'opacity-50 hover:opacity-100' : 'opacity-100'
+          {/* Navegação entre Páginas */}
+          <div className={`flex items-center justify-between gap-4 p-4 sm:p-6 ${
+            isFocusMode ? 'border-t border-gray-100' : ''
           }`}>
             <button
               onClick={previousPage}
               disabled={currentPage === 0}
-              className="px-4 py-2 border border-gray-200 rounded-full text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:hover:bg-white"
+              className={`px-4 sm:px-6 py-2 sm:py-3 rounded-full flex items-center gap-2 transition-all text-sm sm:text-base ${
+                currentPage === 0
+                  ? 'opacity-50 cursor-not-allowed bg-gray-100 text-gray-400'
+                  : 'bg-primary-50 text-primary-700 hover:bg-primary-100'
+              }`}
             >
-              ← Anterior
+              <span>←</span>
+              <span className="hidden sm:inline">Anterior</span>
             </button>
-            <span className="text-sm text-gray-500 whitespace-nowrap">
-              Página {currentPage + 1} de {totalPages}
+            <span className="text-sm text-gray-500">
+              {currentPage + 1}/{totalPages}
             </span>
             <button
               onClick={nextPage}
               disabled={currentPage === totalPages - 1}
-              className="px-4 py-2 border border-gray-200 rounded-full text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:hover:bg-white"
+              className={`px-4 sm:px-6 py-2 sm:py-3 rounded-full flex items-center gap-2 transition-all text-sm sm:text-base ${
+                currentPage === totalPages - 1
+                  ? 'opacity-50 cursor-not-allowed bg-gray-100 text-gray-400'
+                  : 'bg-primary-50 text-primary-700 hover:bg-primary-100'
+              }`}
             >
-              Próxima →
+              <span className="hidden sm:inline">Próxima</span>
+              <span>→</span>
             </button>
           </div>
         </div>
 
         {/* Dicas de Leitura */}
-        <div className={`bg-white rounded-2xl p-6 md:p-8 shadow-sm transition-opacity duration-300 ${
-          isFocusMode ? 'opacity-0 pointer-events-none absolute' : 'opacity-100 relative'
-        }`}>
-          <h2 className="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
-            <span>💡</span>
-            <span>Dicas para uma Leitura Mágica</span>
-          </h2>
-          <div className="grid gap-6 md:grid-cols-2">
-            <div className="bg-gradient-to-br from-primary-50 to-white p-6 rounded-xl">
-              <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                <span>🎭</span>
-                <span>Para uma Experiência Encantadora</span>
-              </h3>
-              <ul className="space-y-3">
-                <li className="flex items-start gap-2 text-gray-700">
-                  <span className="text-primary-500">•</span>
-                  <span>Use diferentes vozes para cada personagem</span>
-                </li>
-                <li className="flex items-start gap-2 text-gray-700">
-                  <span className="text-primary-500">•</span>
-                  <span>Faça pausas para conversar sobre a história</span>
-                </li>
-                <li className="flex items-start gap-2 text-gray-700">
-                  <span className="text-primary-500">•</span>
-                  <span>Pergunte o que acontecerá em seguida</span>
-                </li>
-              </ul>
-            </div>
-            <div className="bg-gradient-to-br from-secondary-50 to-white p-6 rounded-xl">
-              <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                <span>✨</span>
-                <span>Benefícios da Leitura</span>
-              </h3>
-              <ul className="space-y-3">
-                <li className="flex items-start gap-2 text-gray-700">
-                  <span className="text-secondary-500">•</span>
-                  <span>Estimula a imaginação e criatividade</span>
-                </li>
-                <li className="flex items-start gap-2 text-gray-700">
-                  <span className="text-secondary-500">•</span>
-                  <span>Enriquece o vocabulário</span>
-                </li>
-                <li className="flex items-start gap-2 text-gray-700">
-                  <span className="text-secondary-500">•</span>
-                  <span>Fortalece o vínculo afetivo</span>
-                </li>
-              </ul>
+        {!isFocusMode && (
+          <div className="mt-8 bg-white rounded-3xl p-6 sm:p-8 shadow-sm">
+            <h2 className="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+              <span>💡</span>
+              <span>Dicas para uma Leitura Mágica</span>
+            </h2>
+            <div className="grid gap-6 sm:grid-cols-2">
+              <div className="bg-gradient-to-br from-primary-50 to-white p-4 sm:p-6 rounded-xl">
+                <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                  <span>🎭</span>
+                  <span>Como Ler para Crianças</span>
+                </h3>
+                <ul className="space-y-3">
+                  <li className="flex items-start gap-2 text-gray-700 text-sm sm:text-base">
+                    <span className="text-primary-500 mt-1">•</span>
+                    <span>Use diferentes vozes para cada personagem</span>
+                  </li>
+                  <li className="flex items-start gap-2 text-gray-700 text-sm sm:text-base">
+                    <span className="text-primary-500 mt-1">•</span>
+                    <span>Faça pausas dramáticas nos momentos importantes</span>
+                  </li>
+                  <li className="flex items-start gap-2 text-gray-700 text-sm sm:text-base">
+                    <span className="text-primary-500 mt-1">•</span>
+                    <span>Pergunte o que a criança acha que vai acontecer</span>
+                  </li>
+                </ul>
+              </div>
+              <div className="bg-gradient-to-br from-secondary-50 to-white p-4 sm:p-6 rounded-xl">
+                <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                  <span>✨</span>
+                  <span>Benefícios da Leitura</span>
+                </h3>
+                <ul className="space-y-3">
+                  <li className="flex items-start gap-2 text-gray-700 text-sm sm:text-base">
+                    <span className="text-secondary-500 mt-1">•</span>
+                    <span>Estimula a imaginação e criatividade</span>
+                  </li>
+                  <li className="flex items-start gap-2 text-gray-700 text-sm sm:text-base">
+                    <span className="text-secondary-500 mt-1">•</span>
+                    <span>Desenvolve o vocabulário e a linguagem</span>
+                  </li>
+                  <li className="flex items-start gap-2 text-gray-700 text-sm sm:text-base">
+                    <span className="text-secondary-500 mt-1">•</span>
+                    <span>Fortalece o vínculo afetivo</span>
+                  </li>
+                </ul>
+              </div>
             </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );

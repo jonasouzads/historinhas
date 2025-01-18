@@ -1,163 +1,220 @@
+'use client';
+
 import Link from 'next/link';
-import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
-import { cookies } from 'next/headers';
-import { redirect } from 'next/navigation';
+import { motion } from 'framer-motion';
+import { useInView } from 'framer-motion';
+import { useRef } from 'react';
 
-export default async function Home() {
-  const supabase = createServerComponentClient({ cookies });
-  const { data: { session } } = await supabase.auth.getSession();
+const fadeIn = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0 }
+};
 
-  if (session) {
-    redirect('/dashboard');
-  }
+export default function HomePage() {
+  const stepsRef = useRef(null);
+  const stepsInView = useInView(stepsRef, { once: true });
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-primary-50 via-white to-secondary-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
-        <header className="pt-6">
-          <nav className="flex justify-between items-center">
-            <div className="flex items-center gap-2">
-              <span className="text-2xl">📚</span>
-              <span className="text-xl font-bold text-primary-600">Historinhas</span>
-            </div>
-            <Link
-              href="/auth/login"
-              className="px-4 py-2 bg-primary-600 text-white rounded-full hover:bg-primary-700 transition-colors"
-            >
-              Entrar
-            </Link>
-          </nav>
-        </header>
-
-        {/* Hero Section */}
-        <main className="mt-16 sm:mt-24">
+      {/* Hero Section */}
+      <div className="relative overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-16 sm:pt-24 sm:pb-20">
           <div className="text-center">
-            <h1 className="text-4xl sm:text-6xl font-bold text-gray-900 mb-6">
-              Histórias Mágicas para{' '}
-              <span className="text-primary-600">Pequenos Leitores</span>
-            </h1>
-            <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
-              Crie histórias personalizadas e encantadoras para as crianças que você ama.
-              Cada história é única, como cada criança é especial.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <motion.h1
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className="text-4xl sm:text-5xl md:text-6xl font-bold text-gray-900 mb-6"
+            >
+              Transforme Cada Noite em uma{' '}
+              <span className="text-primary-600">Aventura Mágica</span>
+            </motion.h1>
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              className="text-xl sm:text-2xl text-gray-600 max-w-3xl mx-auto mb-10"
+            >
+              Histórias personalizadas que fazem os olhos do seu pequeno brilgarem e pedem
+              &ldquo;mais uma vez, mamãe!&rdquo;
+            </motion.p>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="flex flex-col sm:flex-row gap-4 justify-center items-center"
+            >
               <Link
                 href="/auth/register"
-                className="px-8 py-3 bg-primary-600 text-white rounded-full text-lg hover:bg-primary-700 transition-colors inline-flex items-center justify-center gap-2"
+                className="inline-flex items-center px-8 py-3 border border-transparent text-base font-medium rounded-full text-white bg-primary-600 hover:bg-primary-700 md:py-4 md:text-lg md:px-10 transition-all shadow-lg hover:shadow-xl"
               >
-                <span>Começar Agora</span>
-                <span>✨</span>
+                Crie Sua Primeira História Grátis
               </Link>
-              <Link
-                href="/about"
-                className="px-8 py-3 border-2 border-primary-600 text-primary-600 rounded-full text-lg hover:bg-primary-50 transition-colors inline-flex items-center justify-center gap-2"
-              >
-                <span>Saiba Mais</span>
-                <span>→</span>
-              </Link>
-            </div>
+              <span className="text-sm text-gray-500">
+                Já são mais de 10.000 histórias criadas
+              </span>
+            </motion.div>
           </div>
+        </div>
 
-          {/* Features */}
-          <div className="mt-24 grid gap-8 md:grid-cols-3">
-            <div className="bg-white p-8 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
-              <div className="text-3xl mb-4">🎨</div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">Personalização Total</h3>
-              <p className="text-gray-600">
-                Crie histórias únicas com temas, humores e valores que combinam com cada criança.
-              </p>
-            </div>
-            <div className="bg-white p-8 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
-              <div className="text-3xl mb-4">🚀</div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">Criação Instantânea</h3>
-              <p className="text-gray-600">
-                Em poucos minutos, transforme suas ideias em histórias mágicas e cativantes.
-              </p>
-            </div>
-            <div className="bg-white p-8 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
-              <div className="text-3xl mb-4">💝</div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">Momentos Especiais</h3>
-              <p className="text-gray-600">
-                Fortaleça laços criando memórias únicas através da leitura compartilhada.
-              </p>
-            </div>
-          </div>
+        {/* Gradient Background */}
+        <div className="absolute inset-0 -z-10">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-primary-100 via-transparent to-transparent opacity-40"></div>
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,_var(--tw-gradient-stops))] from-secondary-100 via-transparent to-transparent opacity-40"></div>
+        </div>
+      </div>
 
-          {/* Benefits */}
-          <div className="mt-24 mb-16">
-            <div className="bg-white rounded-3xl p-8 md:p-12 shadow-sm">
-              <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">
-                Por que escolher o Historinhas?
-              </h2>
-              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-                <div className="flex items-start gap-3">
-                  <div className="text-primary-500">📖</div>
-                  <div>
-                    <h3 className="font-semibold text-gray-900 mb-1">Leitura Interativa</h3>
-                    <p className="text-sm text-gray-600">
-                      Histórias que incentivam a participação e imaginação
-                    </p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3">
-                  <div className="text-primary-500">🎯</div>
-                  <div>
-                    <h3 className="font-semibold text-gray-900 mb-1">Valores Educativos</h3>
-                    <p className="text-sm text-gray-600">
-                      Conteúdo que ensina e inspira de forma divertida
-                    </p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3">
-                  <div className="text-primary-500">💫</div>
-                  <div>
-                    <h3 className="font-semibold text-gray-900 mb-1">Experiência Mágica</h3>
-                    <p className="text-sm text-gray-600">
-                      Interface intuitiva e encantadora para todas as idades
-                    </p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3">
-                  <div className="text-primary-500">❤️</div>
-                  <div>
-                    <h3 className="font-semibold text-gray-900 mb-1">Conexão Afetiva</h3>
-                    <p className="text-sm text-gray-600">
-                      Momentos especiais de leitura e carinho
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Call to Action */}
-          <div className="text-center mb-24">
-            <h2 className="text-3xl font-bold text-gray-900 mb-6">
-              Pronto para criar histórias incríveis?
+      {/* Como Funciona Section */}
+      <div ref={stepsRef} className="py-16 sm:py-24 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
+              Crie Histórias Mágicas em 3 Passos Simples
             </h2>
-            <p className="text-xl text-gray-600 mb-8">
-              Junte-se a nós e comece a criar memórias mágicas hoje mesmo.
+            <p className="text-xl text-gray-600">
+              É fácil, rápido e mágico!
             </p>
-            <Link
-              href="/register"
-              className="px-8 py-3 bg-primary-600 text-white rounded-full text-lg hover:bg-primary-700 transition-colors inline-flex items-center justify-center gap-2"
-            >
-              <span>Criar Minha Conta</span>
-              <span>✨</span>
-            </Link>
           </div>
-        </main>
 
-        {/* Footer */}
-        <footer className="border-t border-gray-200 py-8">
-          <div className="text-center text-sm text-gray-500">
-            <p>© 2024 Historinhas. Todos os direitos reservados.</p>
-            <p className="mt-2">
-              Criando histórias mágicas para pequenos leitores 💫
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {[
+              {
+                step: '1',
+                title: 'Escolha o Tema',
+                description: 'Selecione entre diversos temas encantadores ou crie seu próprio',
+                icon: '🎨'
+              },
+              {
+                step: '2',
+                title: 'Adicione Valores',
+                description: 'Escolha as lições e valores que deseja transmitir',
+                icon: '✨'
+              },
+              {
+                step: '3',
+                title: 'História Pronta!',
+                description: 'Sua história personalizada está pronta para encantar',
+                icon: '📚'
+              }
+            ].map((item, index) => (
+              <motion.div
+                key={item.step}
+                initial="hidden"
+                animate={stepsInView ? "visible" : "hidden"}
+                variants={fadeIn}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                className="bg-white rounded-2xl p-8 shadow-sm hover:shadow-md transition-shadow relative overflow-hidden group"
+              >
+                <div className="absolute -right-4 -top-4 w-24 h-24 bg-primary-50 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                <div className="relative z-10">
+                  <span className="text-4xl mb-6 block">{item.icon}</span>
+                  <div className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-primary-100 text-primary-600 font-bold text-sm mb-4">
+                    {item.step}
+                  </div>
+                  <h3 className="text-xl font-semibold text-gray-900 mb-2">{item.title}</h3>
+                  <p className="text-gray-600">{item.description}</p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Testimonials Section */}
+      <div className="py-16 sm:py-24">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
+              O Que os Pais Dizem
+            </h2>
+            <p className="text-xl text-gray-600">
+              Junte-se a milhares de pais criando memórias mágicas
             </p>
           </div>
-        </footer>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {[
+              {
+                quote: "Revolucionou nossa hora de dormir! Minha filha agora pede toda noite uma história nova.",
+                author: "Maria S.",
+                role: "mãe da Laura, 5 anos",
+                avatar: "👩"
+              },
+              {
+                quote: "Criar histórias personalizadas virou nosso momento especial. Os olhinhos dele brilham!",
+                author: "Pedro M.",
+                role: "pai do Theo, 4 anos",
+                avatar: "👨"
+              }
+            ].map((testimonial, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                className="bg-white rounded-2xl p-8 shadow-sm hover:shadow-md transition-shadow"
+              >
+                <div className="flex items-center gap-4 mb-4">
+                  <div className="text-4xl">{testimonial.avatar}</div>
+                  <div>
+                    <h3 className="font-semibold text-gray-900">{testimonial.author}</h3>
+                    <p className="text-sm text-gray-500">{testimonial.role}</p>
+                  </div>
+                </div>
+                <p className="text-gray-600 italic">&ldquo;{testimonial.quote}&rdquo;</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Final CTA */}
+      <div className="py-16 sm:py-24">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-2xl font-bold mb-4">
+            Transforme seus &quot;ebooks&quot; em uma fonte de renda passiva
+          </h2>
+          <p className="text-gray-600 text-sm">
+            Comece agora mesmo a vender seus &quot;ebooks&quot; e alcance mais leitores
+          </p>
+          <Link
+            href="/auth/register"
+            className="inline-flex items-center px-8 py-3 border border-transparent text-base font-medium rounded-full text-white bg-primary-600 hover:bg-primary-700 md:py-4 md:text-lg md:px-10 transition-all shadow-lg hover:shadow-xl"
+          >
+            Criar Minha Primeira História
+          </Link>
+          <div className="mt-8 flex justify-center gap-8">
+            <div className="flex items-center gap-2">
+              <span className="text-2xl">🔒</span>
+              <span className="text-sm text-gray-500">Pagamento Seguro</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-2xl">✨</span>
+              <span className="text-sm text-gray-500">Garantia de 30 dias</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-2xl">💝</span>
+              <span className="text-sm text-gray-500">Cancele quando quiser</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="text-center">
+        <h1 className="text-4xl sm:text-5xl font-bold text-gray-900">
+          Transforme suas histórias em &quot;ebooks&quot; mágicos
+        </h1>
+        <p className="mt-4 text-lg text-gray-600">
+          Crie histórias personalizadas e &quot;ebooks&quot; infantis com IA
+        </p>
+      </div>
+      <div className="text-center">
+        <h2 className="text-3xl sm:text-4xl font-bold text-gray-900">
+          Comece sua jornada hoje e crie &quot;ebooks&quot; incríveis
+        </h2>
+        <p className="mt-4 text-lg text-gray-600">
+          Use o poder da IA para criar &quot;ebooks&quot; personalizados
+        </p>
       </div>
     </div>
   );
