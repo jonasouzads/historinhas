@@ -153,7 +153,7 @@ ${story.mood ? `Humor: ${story.mood}` : ''}
       isFocusMode ? 'fixed inset-0 bg-[#FFFAF5] overflow-y-auto' : 'bg-gradient-to-br from-primary-50 via-white to-secondary-50'
     }`}>
       <div className={`w-full mx-auto px-4 sm:px-6 ${
-        isFocusMode ? 'h-full py-4 flex flex-col max-w-3xl' : 'py-8 max-w-5xl'
+        isFocusMode ? 'h-[90%] py-4 flex flex-col max-w-3xl' : 'py-8 max-w-5xl'
       }`}>
         {/* Barra de Navegação Superior */}
         <div className={`flex flex-wrap justify-between items-center gap-4 mb-8 transition-all duration-300 ${
