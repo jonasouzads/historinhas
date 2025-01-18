@@ -169,6 +169,112 @@ export default function HomePage() {
         </div>
       </div>
 
+      {/* Pricing Section */}
+      <section className="py-16 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <motion.h2
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+              className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4"
+            >
+              Escolha o Plano Ideal para Sua Família
+            </motion.h2>
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              className="text-xl text-gray-600 max-w-2xl mx-auto"
+            >
+              Comece a criar histórias mágicas hoje mesmo e encante seus pequenos com narrativas únicas e personalizadas
+            </motion.p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+            {[
+              {
+                name: "Plano Mágico",
+                price: "R$ 14,90",
+                paymentLink: "https://pay.kiwify.com.br/mxHAUaX",
+                features: [
+                  "Histórias ilimitadas",
+                  "Todas as personalizações",
+                  "Biblioteca completa",
+                  "Suporte por email",
+                  "Temas exclusivos",
+                  "Exportação em PDF"
+                ],
+                color: "primary"
+              },
+              {
+                name: "Plano Família",
+                price: "R$ 19,90",
+                paymentLink: "https://pay.kiwify.com.br/0aunU62",
+                features: [
+                  "Tudo do Plano Mágico",
+                  "Até 3 perfis infantis",
+                  "Histórias compartilháveis",
+                  "Suporte prioritário",
+                  "Temas premium",
+                  "Backup na nuvem"
+                ],
+                color: "secondary",
+                popular: true
+              }
+            ].map((plan, index) => (
+              <motion.div
+                key={plan.name}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                className={`bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow relative ${
+                  plan.popular ? 'border-2 border-primary-500 scale-105' : 'border border-gray-200'
+                }`}
+              >
+                {plan.popular && (
+                  <span className="absolute -top-4 left-1/2 -translate-x-1/2 bg-primary-500 text-white px-4 py-1 rounded-full text-sm font-medium">
+                    Mais Popular
+                  </span>
+                )}
+
+                <div className="text-center mb-8">
+                  <h3 className="text-2xl font-bold text-gray-900 mb-2">{plan.name}</h3>
+                  <div className="flex items-center justify-center gap-1">
+                    <span className="text-4xl font-bold text-primary-600">{plan.price}</span>
+                    <span className="text-gray-500">/mês</span>
+                  </div>
+                </div>
+
+                <ul className="space-y-4 mb-8">
+                  {plan.features.map((feature) => (
+                    <li key={feature} className="flex items-center gap-3">
+                      <span className="text-primary-500 text-xl">✓</span>
+                      <span className="text-gray-700">{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+
+                <Link
+                  href={plan.paymentLink}
+                  target="_blank"
+                  className={`block w-full py-4 px-6 rounded-xl text-center font-medium transition-all transform hover:scale-105 ${
+                    plan.popular
+                      ? 'bg-primary-600 text-white hover:bg-primary-700 shadow-lg hover:shadow-xl'
+                      : 'bg-gray-100 text-gray-900 hover:bg-gray-200'
+                  }`}
+                >
+                  Começar Agora
+                </Link>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Final CTA */}
       <div className="py-16 sm:py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
@@ -200,22 +306,26 @@ export default function HomePage() {
           </div>
         </div>
       </div>
-      <div className="text-center">
-        <h1 className="text-4xl sm:text-5xl font-bold text-gray-900">
-          Transforme suas histórias em &quot;ebooks&quot; mágicos
-        </h1>
-        <p className="mt-4 text-lg text-gray-600">
-          Crie histórias personalizadas e &quot;ebooks&quot; infantis com IA
-        </p>
-      </div>
-      <div className="text-center">
-        <h2 className="text-3xl sm:text-4xl font-bold text-gray-900">
-          Comece sua jornada hoje e crie &quot;ebooks&quot; incríveis
-        </h2>
-        <p className="mt-4 text-lg text-gray-600">
-          Use o poder da IA para criar &quot;ebooks&quot; personalizados
-        </p>
-      </div>
+      
+      {/* Utmify Scripts */}
+      <script
+        src="https://cdn.utmify.com.br/scripts/utms/latest.js"
+        data-utmify-prevent-subids
+        async
+        defer
+      />
+      <script
+        dangerouslySetInnerHTML={{
+          __html: `
+            window.pixelId = "678b23f9abcaf962211a5587";
+            var a = document.createElement("script");
+            a.setAttribute("async", "");
+            a.setAttribute("defer", "");
+            a.setAttribute("src", "https://cdn.utmify.com.br/scripts/pixel/pixel.js");
+            document.head.appendChild(a);
+          `
+        }}
+      />
     </div>
   );
 }
