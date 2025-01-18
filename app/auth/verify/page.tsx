@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { Suspense, useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -8,7 +8,8 @@ import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import { Decorations } from '@/components/Decorations';
 import { AuthError } from '@supabase/supabase-js';
 
-export default function VerifyPage() {
+// Componente que lida com a verificação
+function VerifyContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [error, setError] = useState<string | null>(null);
@@ -107,5 +108,37 @@ export default function VerifyPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+// Loading fallback
+function LoadingState() {
+  return (
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-blue-50 to-purple-50 px-4 py-8">
+      <Decorations />
+      <div className="w-full max-w-md relative z-10">
+        <div className="text-center">
+          <Image
+            src="/images/loading-star.svg"
+            alt="Carregando..."
+            width={120}
+            height={120}
+            className="mx-auto mb-4 md:mb-6 w-24 h-24 md:w-32 md:h-32 animate-spin"
+          />
+        </div>
+        <h2 className="mt-2 text-center text-2xl md:text-3xl font-extrabold text-gray-900">
+          Carregando... ⭐
+        </h2>
+      </div>
+    </div>
+  );
+}
+
+// Página principal com Suspense
+export default function VerifyPage() {
+  return (
+    <Suspense fallback={<LoadingState />}>
+      <VerifyContent />
+    </Suspense>
   );
 }

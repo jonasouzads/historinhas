@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { useInView } from 'framer-motion';
 import { useRef } from 'react';
+import Image from 'next/image';
 
 const fadeIn = {
   hidden: { opacity: 0, y: 20 },
@@ -227,10 +228,13 @@ export default function HomePage() {
               className="relative"
             >
               <div className="aspect-w-4 aspect-h-3 rounded-2xl overflow-hidden shadow-xl">
-                <img
+                <Image
                   src="/images/story-preview.jpg"
                   alt="Preview de uma história personalizada"
                   className="object-cover"
+                  fill
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  priority
                 />
               </div>
             </motion.div>
