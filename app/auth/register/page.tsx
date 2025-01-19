@@ -39,7 +39,7 @@ export default function RegisterPage() {
       <div className="w-full max-w-md relative z-10">
         <div className="text-center">
           <Image
-            src="/images/varinha-magica.png"
+            src="/images/livro.png"
             alt="Varinha mágica"
             width={120}
             height={120}

@@ -17,7 +17,7 @@ export default function HomePage() {
   const stepsInView = useInView(stepsRef, { once: true });
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-primary-50 via-white to-secondary-50">
+    <div className="min-h-screen bg-white">
       <Script
         src="https://cdn.utmify.com.br/scripts/utms/latest.js"
         data-utmify-prevent-subids
@@ -36,48 +36,64 @@ export default function HomePage() {
       {/* Hero Section */}
       <div className="relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-16 sm:pt-24 sm:pb-20">
-          <div className="text-center">
-            <motion.h1
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-              className="text-4xl sm:text-5xl md:text-6xl font-bold text-gray-900 mb-6"
-            >
-              Transforme Cada Noite em uma{' '}
-              <span className="text-primary-600">Aventura Mágica</span>
-            </motion.h1>
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-              className="text-xl sm:text-2xl text-gray-600 max-w-3xl mx-auto mb-10"
-            >
-              Histórias personalizadas que fazem os olhos do seu pequeno brilgarem e pedem
-              &ldquo;mais uma vez, mamãe!&rdquo;
-            </motion.p>
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              className="flex flex-col sm:flex-row gap-4 justify-center items-center"
-            >
-              <Link
-                href="/auth/register"
-                className="inline-flex items-center px-8 py-3 border border-transparent text-base font-medium rounded-full text-white bg-primary-600 hover:bg-primary-700 md:py-4 md:text-lg md:px-10 transition-all shadow-lg hover:shadow-xl"
+          <div className="lg:grid lg:grid-cols-2 lg:gap-8 lg:items-center">
+            <div className="text-center lg:text-left">
+              <motion.h1
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+                className="text-4xl sm:text-5xl md:text-6xl font-bold text-gray-900 mb-6"
               >
-                Crie Sua Primeira Histórinha
-              </Link>
-              <span className="text-sm text-gray-500">
-                Já são mais de 10.000 histórias criadas
-              </span>
+                Transforme Cada Noite em uma{' '}
+                <span className="text-[#e87f8e]">Aventura Mágica</span>
+              </motion.h1>
+              <motion.p
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.1 }}
+                className="text-xl sm:text-2xl text-gray-600 max-w-3xl mx-auto lg:mx-0 mb-10"
+              >
+                Histórias personalizadas que fazem os olhos do seu pequeno brilgarem e pedem
+                &ldquo;mais uma vez, mamãe!&rdquo;
+              </motion.p>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start items-center"
+              >
+                <Link
+                  href="/auth/register"
+                  className="inline-flex items-center px-8 py-3 border border-transparent text-base font-medium rounded-full text-white bg-[#e87f8e] hover:bg-[#e06d7e] md:py-4 md:text-lg md:px-10 transition-all shadow-lg hover:shadow-xl"
+                >
+                  Começar Agora
+                </Link>
+              </motion.div>
+            </div>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5, delay: 0.3 }}
+              className="mt-12 lg:mt-0 flex justify-center"
+            >
+              <div className="relative w-full max-w-lg aspect-square">
+                <video
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                >
+                  <source src="/media/hero.mp4" type="video/mp4" />
+                </video>
+              </div>
             </motion.div>
           </div>
         </div>
 
         {/* Gradient Background */}
         <div className="absolute inset-0 -z-10">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-primary-100 via-transparent to-transparent opacity-40"></div>
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,_var(--tw-gradient-stops))] from-secondary-100 via-transparent to-transparent opacity-40"></div>
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-[#e87f8e] via-transparent to-transparent opacity-40"></div>
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,_var(--tw-gradient-stops))] from-[#e87f8e] via-transparent to-transparent opacity-40"></div>
         </div>
       </div>
 
@@ -120,12 +136,12 @@ export default function HomePage() {
                 animate={stepsInView ? "visible" : "hidden"}
                 variants={fadeIn}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="bg-white rounded-2xl p-8 shadow-sm hover:shadow-md transition-shadow relative overflow-hidden group"
+                className="bg-white rounded-2xl p-8 relative overflow-hidden group"
               >
-                <div className="absolute -right-4 -top-4 w-24 h-24 bg-primary-50 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                <div className="absolute -right-4 -top-4 w-24 h-24 bg-[#e87f8e]/10 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"></div>
                 <div className="relative z-10">
                   <span className="text-4xl mb-6 block">{item.icon}</span>
-                  <div className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-primary-100 text-primary-600 font-bold text-sm mb-4">
+                  <div className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-[#e87f8e]/10 text-[#e87f8e] font-bold text-sm mb-4">
                     {item.step}
                   </div>
                   <h3 className="text-xl font-semibold text-gray-900 mb-2">{item.title}</h3>
@@ -175,7 +191,7 @@ export default function HomePage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow"
+                className="bg-white rounded-xl p-6"
               >
                 <div className="text-4xl mb-4">{item.icon}</div>
                 <h3 className="text-xl font-bold mb-2">{item.title}</h3>
@@ -209,7 +225,7 @@ export default function HomePage() {
               className="space-y-6"
             >
               <div className="flex items-start gap-4">
-                <div className="bg-primary-100 p-3 rounded-full">
+                <div className="bg-[#e87f8e]/10 p-3 rounded-full">
                   <span className="text-2xl">✨</span>
                 </div>
                 <div>
@@ -218,7 +234,7 @@ export default function HomePage() {
                 </div>
               </div>
               <div className="flex items-start gap-4">
-                <div className="bg-primary-100 p-3 rounded-full">
+                <div className="bg-[#e87f8e]/10 p-3 rounded-full">
                   <span className="text-2xl">📚</span>
                 </div>
                 <div>
@@ -227,7 +243,7 @@ export default function HomePage() {
                 </div>
               </div>
               <div className="flex items-start gap-4">
-                <div className="bg-primary-100 p-3 rounded-full">
+                <div className="bg-[#e87f8e]/10 p-3 rounded-full">
                   <span className="text-2xl">🎨</span>
                 </div>
                 <div>
@@ -243,7 +259,7 @@ export default function HomePage() {
               transition={{ duration: 0.5 }}
               className="relative"
             >
-              <div className="aspect-w-4 aspect-h-3 rounded-2xl overflow-hidden shadow-xl">
+              <div className="aspect-w-4 aspect-h-3 rounded-2xl overflow-hidden">
                 <Image
                   src="/images/story-preview.jpg"
                   alt="Preview de uma história personalizada"
@@ -259,7 +275,7 @@ export default function HomePage() {
       </section>
 
       {/* Value Proposition Section */}
-      <section className="py-16 bg-gradient-to-b from-primary-50 to-white">
+      <section className="py-16 bg-gradient-to-b from-[#e87f8e]/10 to-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <motion.h2
@@ -313,7 +329,7 @@ export default function HomePage() {
       </section>
 
       {/* Quick Action CTA */}
-      <section className="py-12 bg-primary-50">
+      <section className="py-12 bg-[#e87f8e]/10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -330,7 +346,7 @@ export default function HomePage() {
             </p>
             <Link
               href="/auth/register"
-              className="inline-flex items-center px-8 py-3 border border-transparent text-base font-medium rounded-full text-white bg-primary-600 hover:bg-primary-700 md:py-4 md:text-lg md:px-10 transition-all shadow-lg hover:shadow-xl"
+              className="inline-flex items-center px-8 py-3 border border-transparent text-base font-medium rounded-full text-white bg-[#e87f8e] hover:bg-[#e06d7e] md:py-4 md:text-lg md:px-10 transition-all shadow-lg hover:shadow-xl"
             >
               Criar Minha Primeira História
             </Link>
@@ -371,7 +387,7 @@ export default function HomePage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="bg-white rounded-2xl p-8 shadow-sm hover:shadow-md transition-shadow"
+                className="bg-white rounded-2xl p-8"
               >
                 <div className="flex items-center gap-4 mb-4">
                   <div className="text-4xl">{testimonial.avatar}</div>
@@ -448,12 +464,12 @@ export default function HomePage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                className={`bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow relative ${
-                  plan.popular ? 'border-2 border-primary-500 scale-105' : 'border border-gray-200'
+                className={`bg-white rounded-2xl p-8 relative ${
+                  plan.popular ? 'border-2 border-[#e87f8e] scale-105' : 'border border-gray-200'
                 }`}
               >
                 {plan.popular && (
-                  <span className="absolute -top-4 left-1/2 -translate-x-1/2 bg-primary-500 text-white px-4 py-1 rounded-full text-sm font-medium">
+                  <span className="absolute -top-4 left-1/2 -translate-x-1/2 bg-[#e87f8e] text-white px-4 py-1 rounded-full text-sm font-medium">
                     Mais Popular
                   </span>
                 )}
@@ -461,7 +477,7 @@ export default function HomePage() {
                 <div className="text-center mb-8">
                   <h3 className="text-2xl font-bold text-gray-900 mb-2">{plan.name}</h3>
                   <div className="flex items-center justify-center gap-1">
-                    <span className="text-4xl font-bold text-primary-600">{plan.price}</span>
+                    <span className="text-4xl font-bold text-[#e87f8e]">{plan.price}</span>
                     <span className="text-gray-500">/mês</span>
                   </div>
                 </div>
@@ -469,7 +485,7 @@ export default function HomePage() {
                 <ul className="space-y-4 mb-8">
                   {plan.features.map((feature) => (
                     <li key={feature} className="flex items-center gap-3">
-                      <span className="text-primary-500 text-xl">✓</span>
+                      <span className="text-[#e87f8e] text-xl">✓</span>
                       <span className="text-gray-700">{feature}</span>
                     </li>
                   ))}
@@ -480,7 +496,7 @@ export default function HomePage() {
                   target="_blank"
                   className={`block w-full py-4 px-6 rounded-xl text-center font-medium transition-all transform hover:scale-105 ${
                     plan.popular
-                      ? 'bg-primary-600 text-white hover:bg-primary-700 shadow-lg hover:shadow-xl'
+                      ? 'bg-[#e87f8e] text-white hover:bg-[#e06d7e]'
                       : 'bg-gray-100 text-gray-900 hover:bg-gray-200'
                   }`}
                 >
@@ -497,7 +513,7 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <Link
             href="/auth/register"
-            className="inline-flex items-center px-8 py-3 border border-transparent text-base font-medium rounded-full text-white bg-primary-600 hover:bg-primary-700 md:py-4 md:text-lg md:px-10 transition-all shadow-lg hover:shadow-xl"
+            className="inline-flex items-center px-8 py-3 border border-transparent text-base font-medium rounded-full text-white bg-[#e87f8e] hover:bg-[#e06d7e] md:py-4 md:text-lg md:px-10 transition-all shadow-lg hover:shadow-xl"
           >
             Criar Minha Primeira História
           </Link>
