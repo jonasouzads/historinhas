@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { useInView } from 'framer-motion';
 import { useRef } from 'react';
 import Image from 'next/image';
+import Script from 'next/script';
 
 const fadeIn = {
   hidden: { opacity: 0, y: 20 },
@@ -17,6 +18,21 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-primary-50 via-white to-secondary-50">
+      <Script
+        src="https://cdn.utmify.com.br/scripts/utms/latest.js"
+        data-utmify-prevent-subids
+        strategy="afterInteractive"
+      />
+      <Script id="utmify-pixel" strategy="afterInteractive">
+        {`
+          window.pixelId = "678b23f9abcaf962211a5587";
+          var a = document.createElement("script");
+          a.setAttribute("async", "");
+          a.setAttribute("defer", "");
+          a.setAttribute("src", "https://cdn.utmify.com.br/scripts/pixel/pixel.js");
+          document.head.appendChild(a);
+        `}
+      </Script>
       {/* Hero Section */}
       <div className="relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-16 sm:pt-24 sm:pb-20">
@@ -501,26 +517,6 @@ export default function HomePage() {
           </div>
         </div>
       </div>
-      
-      {/* Utmify Scripts */}
-      <script
-        src="https://cdn.utmify.com.br/scripts/utms/latest.js"
-        data-utmify-prevent-subids
-        async
-        defer
-      />
-      <script
-        dangerouslySetInnerHTML={{
-          __html: `
-            window.pixelId = "678b23f9abcaf962211a5587";
-            var a = document.createElement("script");
-            a.setAttribute("async", "");
-            a.setAttribute("defer", "");
-            a.setAttribute("src", "https://cdn.utmify.com.br/scripts/pixel/pixel.js");
-            document.head.appendChild(a);
-          `
-        }}
-      />
     </div>
   );
 }

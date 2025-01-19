@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
 import type { Database, Child } from '@/lib/supabase';
 import MyStories from '@/components/MyStories';
 import StoryForm from '@/components/StoryForm';
@@ -103,8 +104,13 @@ export default function Dashboard() {
         <header className="bg-white border-b">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex justify-between items-center h-16">
-              <span className="text-2xl">📚</span>
-              <span className="ml-2 text-xl font-bold text-primary-600">Historinhas</span>
+              <Image
+                src="/images/logo.png"
+                alt="Historinhas Logo"
+                width={140}
+                height={40}
+                className="h-auto"
+              />
             </div>
           </div>
         </header>
@@ -127,8 +133,13 @@ export default function Dashboard() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex justify-between items-center h-16">
               <Link href="/dashboard" className="flex items-center">
-                <span className="text-2xl">📚</span>
-                <span className="ml-2 text-xl font-bold text-primary-600">Historinhas</span>
+                <Image
+                  src="/images/logo.png"
+                  alt="Historinhas Logo"
+                  width={140}
+                  height={40}
+                  className="h-auto"
+                />
               </Link>
             </div>
           </div>
@@ -158,8 +169,13 @@ export default function Dashboard() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <Link href="/dashboard" className="flex items-center">
-              <span className="text-2xl">📚</span>
-              <span className="ml-2 text-xl font-bold text-primary-600">Historinhas</span>
+              <Image
+                src="/images/logo.png"
+                alt="Historinhas Logo"
+                width={140}
+                height={40}
+                className="h-auto"
+              />
             </Link>
             <div className="relative">
               <button
